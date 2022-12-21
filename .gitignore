@@ -1,0 +1,19 @@
+### Git ignore basic file CLS lmerillet ###
+
+# all data sources
+*.nc/
+*.csv/
+*.xls/
+*.xlsx/
+*.RData/
+
+# log files
+*.out/
+
+# Results
+*.png/
+*.tif/
+*.tiff/
+*.svg/
+
+

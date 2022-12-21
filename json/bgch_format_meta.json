@@ -1,0 +1,92 @@
+{
+    "_comments":"meta information of raw input BGCH files",
+   
+    "lon":{
+        "type": "f4",
+        "name": "longitude",
+        "dimensions":{
+            "x":"longitude"
+        },        
+        "attributes":{
+            "standard_name":"longitude",
+            "units" : "degrees_east",
+            "axis"  : "X"
+        },
+        "valid_min": "-180",
+        "valid_max": "179.91666666666666"
+        },
+
+    "lat":{
+        "type": "f4",
+        "name": "latitude",
+        "dimensions":{
+            "x":"latitude"
+        },        
+        "attributes":{
+            "standard_name":"latitude",
+            "units" : "degrees_north",
+            "axis"  : "Y"
+        },
+        "valid_min": "-80",
+        "valid_max": "89.91666666666667"
+    },
+
+    "time":{
+        "type": "i4",
+        "name": "time",
+        "dimensions":{
+            "x":"time"
+        },      
+        "attributes":{
+            "standard_name":"time",
+            "long_name":"time",
+            "units" : "seconds since 1970-01-01 00:00:00",
+            "calendar":"standard",
+            "axis" : "T"
+        }
+    },
+
+    "pp":{
+        "name": "pp",
+        "type": "f4",
+        "dimensions":{
+            "t": "time",
+            "y": "latitude",
+            "x": "longitude"
+        },
+        "attributes":{
+            "standard_name":"net_primary_productivity_of_carbon",
+            "long_name": "Net Primary Production from VGPM",
+            "short_name": "net_primary_productivity",
+            "units" : "mg m-2 day-1"
+        }
+    },
+
+    "zeu":{
+        "name": "zeu",
+        "type": "f4",
+        "dimensions":{
+            "t": "time",
+            "y": "latitude",
+            "x": "longitude"
+        },
+        "attributes":{
+            "standard_name":"euphotic_layer_depth",
+            "long_name": "Euphotic layer depth from Morel algorithm",
+            "short_name": "euphotic_depth",
+            "units" : "m"
+        }
+    },
+
+    "global_attributes":{
+        "title": "BGCH variables for SEAPODYM GLOBAL REANALYSIS",
+        "institution": "CLS (Collecte Localisation Satellites)",
+        "references":"http://www.cls.fr; http://www.seapodym.eu",
+        "source": "Datastore, dataset-catsat-nrt-global-net-primary-production",
+        "net_primary_production_model" : "vgpm",
+        "comment": "Data for SGO12 REANALYSIS",
+        "Conventions" : "CF-1.7",
+        "resolution":"008x1d",
+        "domain" :"global"
+    }
+}

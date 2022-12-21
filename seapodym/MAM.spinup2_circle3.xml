@@ -1,0 +1,299 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- define internal ENTITY to be used for defining macros -->
+<!-- use NOENT option when parsing xml file in order to replace entity by its value-->
+<!DOCTYPE par [
+  <!ENTITY rootDir "">
+]>
+
+<par version="1.0">
+
+<!-- Remarks -->
+<!-- Boolean valid values are "yes" "true" "1" "no" "false" "0" --> 
+
+<!-- model valid values:      -->
+<!-- prey    : forage model   -->
+<!-- predator: predator model -->
+<model value="prey"/>
+
+<!--============================================================================================ -->
+<!--SIMULATION PARAMETERS                                                                        -->
+<!--============================================================================================ -->
+
+<!-- Model simulation step in days, model time unit                 -->
+<!-- Advection diffusion reaction equation is integrated            -->
+<!-- with piecewise stationary coefficients. simStep represents the -->
+<!-- time interval during which coefficients are constant in time.  -->
+<!-- It also represents the step at which solution is recorded      --> 
+<!-- It also represents the time unit of the ADR equation: forcing  -->
+<!-- terms are scaled to this unit at runtime                       -->
+<simulationStep value="1"/>
+
+<!-- Integration time step in hours                                   -->
+<!-- Step used to integrate ADR equation			      -->
+<!-- between two time steps, with stationary coefficients (see above) -->
+<!-- Number of iterations is then equal to			      -->
+<!-- timeStep_(days) * 24 (hours) / integrationStep (hours)           --> 
+<integrationStep value="2"/>
+<!-- Boundary conditions valid values: -->
+<!-- "CLOSED"                          -->
+<!-- "OPEN"                            -->
+<!-- "CEW" (cyclic East-West)          -->
+<!-- "REG" (regional)                  -->
+<!-- <boundaryConditions value="CEW"/> -->
+<boundaryConditions value="CLOSED"/>
+
+<!--============================================================================================ -->
+<!--TIME CONTROL                                                                                 -->
+<!--============================================================================================ -->
+
+<!-- dateMode valid values                        -->
+<!-- STANDARD : real calendar                     -->
+<!-- NOLEAP   : no leap years                     -->
+<!-- MONTHLY  : 360 days year with 30 days months -->
+<dateMode value="STANDARD"/>
+
+<!-- date format: YYYY-mm-dd -->
+<FirstDate value="2001-07-01"/> 
+<LastDate  value="2002-12-30"/>
+
+<!--============================================================================================ -->
+<!--MODEL INPUTS / PATH NAMES                                                                    -->
+<!--============================================================================================ -->
+
+<!-- Forcing files nomenclature:                     -->
+<!-- <dir>/<prefix>_<suffix>.<ext>                   -->
+<!-- suffix = %Y%m%d means a date in YYYYmmdd format -->
+
+<forcing>
+<U  offline="yes" clim="no"
+    dir="/home/lmerillet/Documents/RUN_SEAPODYM/MEESO/forcings/PHYS" prefix="meeso_benthosema_PHYS" variable="U" is3d="yes" nbLayer="3" suffix="%Y%m%d" ext="nc"
+    transpose="yes" flipud="no"/>
+
+<V  offline="yes" clim="false"
+    dir="/home/lmerillet/Documents/RUN_SEAPODYM/MEESO/forcings/PHYS" prefix="meeso_benthosema_PHYS"  variable="V" nbLayer="3" is3d="yes" suffix="%Y%m%d" ext="nc"
+    transpose="yes" flipud="no"/>
+
+<T  offline="yes" clim="false"
+    dir="/home/lmerillet/Documents/RUN_SEAPODYM/MEESO/forcings/PHYS" prefix="meeso_benthosema_PHYS" variable="T" nbLayer="3" is3d="yes" suffix="%Y%m%d"  ext="nc"
+    transpose="yes" flipud="no"/>
+
+<NPP offline="yes" clim="false"
+    dir="/home/lmerillet/Documents/RUN_SEAPODYM/MEESO/forcings/BGCH" prefix="meeso_benthosema_BGCH" variable="pp" nbLayer="1" is3d="no" suffix="%Y%m%d"  ext="nc"
+    transpose="yes" flipud="no"/>
+</forcing>
+
+<inputOBCDir value="/dev/null"/>
+
+<!-- domain File (absolute path) -->
+<!-- domain files is a netCDF file containing domain informations -->
+<!-- * longitudes, latitudes, mask and layers                  -->
+<domainFile value="/home/lmerillet/Documents/RUN_SEAPODYM/MEESO/SAD/MASK/meeso_mask.nc" variable="mask"
+                   transpose="yes" flipud="true"/>
+<!-- <domainFile value="&rootDir;/sad/masks/mask_layers.seapodym.nc" variable="mask"
+                   transpose="yes" flipud="true"/>                    -->
+
+<outputDir value="/home/lmerillet/Documents/RUN_SEAPODYM/MEESO/MAM-BEG/SPINUP2_MAM/Circle3"/>
+<!-- nom de fichier de sortie: ZPK_D1N1_production_YYYYMMDD.nc
+    <TROPHIC_LEVEL>_<GROUP>_production_YYYYMMDD.nc : production: restart pour rectruited production 
+    <TROPHIC_LEVEL>_<GROUP>_recprod_YYYYMMDD.nc : rectruited production 
+    <TROPHIC_LEVEL>_<GROUP>_biomass_YYYYMMDD.nc : biomass
+-->
+<!-- reduce output: in parallel mode, potential production DYM files (recruitement) are saved by 
+each processus. A reduce operation must be performed inline or offline 
+with the help of a post-process script. -->
+<!--<reduceOutputInline value="yes"/>-->
+<reduceOutputInline value="yes"/>
+<!--============================================================================================ -->
+<!-- MODEL FEATURES                                                                              -->
+<!--============================================================================================ -->
+<restart>
+    <PRODUCTION>
+        <!-- input -->
+        <!-- path: directory where restart file is located -->
+        <!-- reduce: are initial conditions reduced in a single file ? -->
+        <read 
+            value="yes" 
+            path="/home/lmerillet/Documents/RUN_SEAPODYM/MEESO/restart" 
+            transpose="yes" 
+            flipud="yes"
+            reduce="yes"
+        />
+        <!-- value: yes/no                                           -->
+        <!-- reduce: should be reduce restart into a single file ?   -->
+        <!-- path: directory where restart file will be stored       -->
+        <!-- when: coma separated list of conditions                 -->
+        <!-- conditions are on the form <step=<int>|at=<value>>      -->
+        <!-- step=<int>: save restart each <int> step staring at the -->
+        <!--          at the first simulation date - simulation step -->
+        <!-- at=<value>: accepted values:                            -->
+        <!--      end: at the last simulation date                   -->
+        <!--      year: at the last simulation date in each year     -->
+        <!--      +<int>: <int> days after the first simulation date -->
+        <!--     -<int>: <int> days before the last simulation date  -->
+        <!--      YYYY-mm-dd: at the selected date  YYYY-mm-dd       -->
+        <write 
+            value="yes" 
+            when="at=end"
+            path="/home/lmerillet/Documents/RUN_SEAPODYM/MEESO/restart" 
+            reduce="yes"
+        />
+    </PRODUCTION>
+    <BIOMASS>
+        <!-- input -->
+        <!-- path: directory where restart file is located -->
+        <!-- reduce: are initial conditions reduced in a single file ? -->
+        <read 
+            value="yes" 
+            path="/home/lmerillet/Documents/RUN_SEAPODYM/MEESO/restart" 
+            transpose="yes" 
+            flipud="yes"
+            reduce="no"
+        />
+        <write 
+            value="yes" 
+            when="at=end"
+            path="/home/lmerillet/Documents/RUN_SEAPODYM/MEESO/restart" 
+            reduce="no"
+        />
+    </BIOMASS>
+</restart>
+
+<!-- Valid values of production source values -->
+<!-- * file:    read data from file (hardcoded name: see ) -->
+<!-- * coupled: read data from coupled model -->
+<!-- * inline : read data from memory        --> 
+<production source="inline" clim="false"/>
+
+<!-- ============================================================================================ -->
+<!-- REGIONALIZATION: SAVING OBC                                                                  -->
+<!-- ============================================================================================ -->
+<!-- Regions for which OBC must be saved -->
+<regions>
+  <!-- valid value for outdir:                        -->
+  <!--  <path>                                        --> 
+  <!--  "default" = outputDir/obc/<region_name>       -->
+  <!--                                                -->
+  <!-- thickness: Size of buffer in degree            -->
+  <!-- Remark: buffers will actually                  --> 
+  <!--         have size greater than size x 2        -->
+  <!--                                                -->
+  <!-- Record step (in hours)                         -->
+  <!-- Remark: validity of this value is              -->
+  <!--         is checked wrt                         --> 
+  <!--         integration step and time step         -->
+  
+  <indonesia     
+      save       = "no"
+      outdir     = "default"
+      latMin     = "-20"
+      latMax     = "25"
+      lonMin     = "90"
+      lonMax     = "144"
+      thickness  = "1"
+      recordStep = "24"
+      />
+
+  <kerguelen
+      save        = "no"
+      outdir      = "default"
+      latMin      = "-63"
+      latMax      = "-36"
+      lonMin      = "45"
+      lonMax      = "114"
+      thickness   = "1"
+      recordStep = "24"
+      />
+
+</regions>
+
+<!-- ============================================================================================ -->
+<!-- TROPHIC LEVEL MODEL PARAMETERS                                                               -->
+<!-- ============================================================================================ -->
+<trophicLevel>
+    
+    <name value="MAM"/>
+
+    <trMax  value="527"/> 
+    <trRate value="-0.125"/>
+    <invLambdaMax  value="2109.0"/> 
+    <invLambdaRate value="-0.125"/>
+    <energyCoeff   value="0.0042"/> 
+    <!-- Convertion factor to get NPP to g m-2 days -1 -->
+    <!-- Exemple mmolC to gC: 12/1000 = 0.012 -->
+    <!-- Exemple mgC   to gC: 1/1000 = 0.001 -->
+    <nppUnitConvert value="0.001"/>
+    <carbonToWetWeight value="11.9"/>
+
+    <!-- Warning: diffusion coefficient 
+    depends on the spatial resolution -->
+    <diffCoeff value="15"/>
+
+    <!-- Customize cohorts number and size -->
+    <!-- yes: number of cohorts is computed automatically from cohortSizes specification  -->
+    <!-- no : number of cohorts and its size are automatically computed from trMax value  -->
+    <customCohorts value="no"/>
+    <!-- Variable size (in time steps) cohorts -->
+    <cohortLengths>4 4 4 4</cohortLengths>
+
+    <!-- lmtl group components -->
+    <!-- Remarks:
+        1) If a single component is selected during
+        execution, then source coefficients are automatically computed                     
+        See initTransferMatrix in ...
+        2) Day and night layers must be consistent with 
+        domain information  -->
+
+    <functionalGroups>
+        <D2N1>
+            <energy value="1"/>
+            <dayLayer value="2"/>
+            <nightLayer value="1"/>
+            <meta> 
+                <PRODUCTION
+                    name = "production"
+                    stdName = "mass_content_of_maurolicus_production_expressed_as_wet_weight_in_sea_water"
+                    units = "g m-2 days-1"
+                />
+                <RECPROD
+                    name = "mamc_recprod"
+                    stdName = "mass_content_of_maurolicus_recruited_production_expressed_as_wet_weight_in_sea_water"
+                    units = "g m-2"
+                />
+                <BIOMASS
+                    name = "mamc"
+                    stdName = "mass_content_of_maurolicus_expressed_as_wet_weight_in_sea_water"
+                    units = "g m-2"
+                />
+            </meta>
+        </D2N1>
+
+    </functionalGroups>
+
+</trophicLevel>
+
+<!-- set add_parameters to yes to add trophic level parameters -->
+<!-- 
+    trMax
+    trRate
+    invLambdaMax
+    invLambdaRate
+    energyTransfer
+    carbonToWetWeight
+    diffCoeff 
+-->
+<meta>
+    <add_parameters value="yes"/>
+    <title value= "Gobal ocean low trophic levels biomass (zooplankton)"/>
+    <institution value= "CLS"/>
+    <references value= "http://www.cls.fr; http://www.seapodym.eu"/>
+    <source value= "seapodym-lmtl (oper)"/>
+    <source_physical_variables value= "MICRORYS12"/>
+    <source_geochemical_variables value= "MICRORYS12"/>
+    <net_primary_production_model value= "vgpm"/>
+    <comment value= "MEESO project"/>
+    <Conventions value= "CF-1.7"/>
+    <resolution value= "008x1d"/>
+    <domain value= "CLOSED"/>
+</meta> 
+    
+</par> <!--end of parfile-->

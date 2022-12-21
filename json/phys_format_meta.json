@@ -1,0 +1,125 @@
+{
+    "_comments":"meta information of raw input PHYS files",
+
+    "lon":{
+        "type": "f4",
+        "name": "longitude",
+        "dimensions":{
+            "x":"longitude"
+        },        
+        "attributes":{
+            "standard_name":"longitude",
+            "units" : "degrees_east",
+            "axis"  : "X"
+        },
+        "valid_min": "-180",
+        "valid_max": "179.91666666666666"
+    },
+    
+    "lat":{
+        "type": "f4",
+        "name": "latitude",
+        "dimensions":{
+            "x":"latitude"
+        },        
+        "attributes":{
+            "standard_name":"latitude",
+            "units" : "degrees_north",
+            "axis"  : "Y"
+        },
+        "valid_min": "-80",
+        "valid_max": "89.91666666666667"
+    },
+
+    "depth":{
+        "type": "f4",
+        "name": "depth",
+        "dimensions":{
+            "z":"depth"
+        },        
+        "attributes":{
+            "standard_name":"depth",
+            "units" : "m",
+            "axis"  : "Z"
+        },
+        "valid_min": "0.494025",
+        "valid_max": "1062.44"
+    },
+
+    "time":{
+        "type": "i4",
+        "name": "time",
+        "dimensions":{
+            "x":"time"
+        },      
+        "attributes":{
+            "standard_name":"time",
+            "long_name":"time",
+            "units" : "seconds since 1970-01-01 00:00:00",
+            "calendar":"standard",
+            "axis" : "T"
+        }
+    },
+    
+    "thetao":{
+        "name": "T",
+        "type": "f4",
+        "dimensions":{
+            "t": "time",
+            "z": "depth",
+            "y": "latitude",
+            "x": "longitude"
+        },
+        "attributes":{
+            "standard_name":"sea_water_potential_temperature",
+            "long_name": "Temperature",
+            "short_name": "Temperature",
+            "units" : "Degrees Celsius"
+        }
+    },
+
+    "uo":{
+        "name": "U",
+        "type": "f4",
+        "dimensions":{
+            "t": "time",
+            "z": "depth",
+            "y": "latitude",
+            "x": "longitude"
+        },
+        "attributes":{
+            "standard_name":"eastward_sea_water_velocity",
+            "long_name": "Eastward velocity",
+            "short_name": "Eastward velocity",
+            "units" : "m s-1"
+        }
+    },
+
+    "vo":{
+        "name": "V",
+        "type": "f4",
+        "dimensions":{
+            "t": "time",
+            "z": "depth",
+            "y": "latitude",
+            "x": "longitude"
+        },
+        "attributes":{
+            "standard_name":"northward_sea_water_velocity",
+            "long_name": "Northward velocity",
+            "short_name": "Northward velocity",
+            "units" : "m s-1"
+        }
+    },
+
+    "global_attributes":{
+        "title": "daily mean fields from Global Ocean Physics Analysis and Forecast updated Daily",
+        "institution": "MERCATOR OCEAN",
+        "references":"http://www.mercator-ocean.fr",
+        "source": "MERCATOR PSY4QV3R1",
+        "comment": "Data for SGO12",
+        "Conventions" : "CF-1.7",
+        "resolution":"008x1d",
+        "domain" :"global"
+    }   
+}
